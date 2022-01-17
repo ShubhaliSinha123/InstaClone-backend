@@ -11,6 +11,7 @@ const {
   deleteComment,
   findAllPostComments,
   findAllPostUser,
+  findAllPostsByUserId
 } = require("../controllers/common");
 
 const verified = require("../middleware/verify");
@@ -27,6 +28,7 @@ router
   )
   .get("/comments/:postId", verified, canAccess("client"), findAllCommentById)
   .get("/all-posts", verified, canAccess(["client"]), findAllPostComments)
+  .get("all-user-posts", verified, canAccess("client", findAllPostsByUserId))
   .delete(
     "/delete-post/:postId",
     verified,
