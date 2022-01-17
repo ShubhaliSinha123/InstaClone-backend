@@ -202,3 +202,11 @@ exports.checkedLiked = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.findAllPostsByUserId = async(req, res, next) => {
+  const userId = await req.loggedInUser.id;
+
+  const data = await Post.find({userId});
+
+  return res.status(200).json({data});
+};
