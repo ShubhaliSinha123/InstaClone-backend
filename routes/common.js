@@ -8,53 +8,43 @@ const {
   findAllCommentById,
   checkedLiked,
   deleteLike,
-  deleteComment
+  deleteComment,
+  findAllPostComments,
+  findAllPostUser,
 } = require("../controllers/common");
 
 const verified = require("../middleware/verify");
 const { canAccess } = require("../middleware/access");
 
 router
-  .post(
-    "/create-post", 
-    verified, 
-    canAccess("anyone"), 
-    createPost)
-  .post(
-    "/create-comment/:postId",
-    verified,
-    canAccess("anyone"),
-    createComment)
+  .post("/create-post", verified, canAccess("anyone"), createPost)
+  .post("/create-comment/:postId", verified, canAccess("anyone"), createComment)
   .get(
-    "/find-all-post-comments/:postId",
+    "/post-comments/:postId",
     verified,
     canAccess("client"),
-    findAllPostCommentById)
-  .get(
-    "/find-all-comments/:postId",
-    verified,
-    canAccess("client"),
-    findAllCommentById)
+    findAllPostCommentById
+  )
+  .get("/comments/:postId", verified, canAccess("client"), findAllCommentById)
+  .get("/all-posts", verified, canAccess(["client"]), findAllPostComments)
   .delete(
     "/delete-post/:postId",
     verified,
     canAccess(["admin", "client"]),
-    deletePost)
+    deletePost
+  )
   .post(
-    "/liked-post/:postId",
+    "/update-like-status/:postId",
     verified,
     canAccess(["client"]),
-    checkedLiked)
-  .delete(
-    "/delete-like/:likeId",
-    verified,
-    canAccess('client'),
-    deleteLike)
+    checkedLiked
+  )
   .delete(
     "/delete-comment/:commentId",
     verified,
-    canAccess('anyone'),
+    canAccess("anyone"),
     deleteComment
   )
+  .get("/all-posts", verified, canAccess(["anyone"]), findAllPostUser);
 
 module.exports = router;

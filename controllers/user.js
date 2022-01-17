@@ -91,3 +91,18 @@ exports.findAndCountUser = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.logoutUser = async (req, res, next) => {
+  try {
+    const userId = await req.loggedInUser.id;
+
+    const user = await User.findById({_id: userId});
+
+    if(!user) {
+      return res.status(404).send("User doesn't exist anymore!");
+    }
+    return res.status(200).send("User logout successfully..");
+  } catch (error) {
+    next(error);
+  }
+};

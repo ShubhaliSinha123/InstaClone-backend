@@ -5,6 +5,7 @@ const {
   updateUser,
   deleteUser,
   findAndCountUser,
+  logoutUser
 } = require("../controllers/user");
 
 const verified = require("../middleware/verify");
@@ -33,6 +34,12 @@ router
     verified,
     canAccess('admin'),
     findAndCountUser
+)
+.delete(
+    '/logout-user',
+    verified,
+    canAccess('client'),
+    logoutUser
 )
 
 module.exports = router;

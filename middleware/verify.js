@@ -1,12 +1,10 @@
 const jwt = require('jsonwebtoken');
 config = require('../config/auth');
 
-
 module.exports = async (req, res, next) => {
     try {
-         var token = req.headers['x-access-token'];
-        console.log(token);
-
+        var token = req.headers['x-access-token'];
+    
         if(token) {
             jwt.verify(token, config.secretKey, {
                 algorithms: 'HS256'
@@ -16,10 +14,9 @@ module.exports = async (req, res, next) => {
                         message: err.message,
                         expiredAt: err.expiredAt
                     };
-                    return res.status(401).send({message: "Unauthorized Access"});
+                    return res.status(401).send({message: "Unauthorized Access", errorData});
                 }
                 req.loggedInUser = decoded;
-                
                 next();
             });
         } else {

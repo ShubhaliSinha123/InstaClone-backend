@@ -17,9 +17,8 @@ module.exports = (function () {
                     access = [access];
                 }
 
-                const email = req.loggedInUser.email;
-                console.log(email);
-                const user = await User.findOne({email});
+                const id = req.loggedInUser.id;
+                const user = await User.findById({_id: id});
 
                (req, res, next) => {
                    if(access.length && access.includes(user.role)) {
