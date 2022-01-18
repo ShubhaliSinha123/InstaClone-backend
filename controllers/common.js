@@ -191,22 +191,28 @@ exports.checkedLiked = async (req, res, next) => {
       const postUser = await User.findById({ _id: post.userId });
       const user = await User.findById({ _id: userId });
 
-      return res
-        .status(201)
-        .json({
-          message: `${postUser.name} post is liked by ${user.name}`,
-          checked: true,
-        });
+      return res.status(201).json({
+        message: `${postUser.name} post is liked by ${user.name}`,
+        checked: true,
+      });
     }
   } catch (error) {
     next(error);
   }
 };
 
-exports.findAllPostsByUserId = async(req, res, next) => {
-  const userId = await req.loggedInUser.id;
+exports.findAllPostsByUserId = async (req, res, next) => {
+  try {
+    const userId = await req.loggedInUser.id;
 
-  const data = await Post.find({userId});
+    const data = await Post.find({ userId })
+      .select(["title", "images", "caption", "comments", "createdAt", "alt"])
+      .sort([["createdAt", -1]]);
 
-  return res.status(200).json({data});
+    console.log(data);
+
+    return res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
 };
