@@ -1,4 +1,7 @@
 require("../db/conn");
+let moment = require("moment");
+moment.suppressDeprecationWarnings = true;
+
 const Post = require("../models/post");
 const User = require("../models/user");
 const Comment = require("../models/comment");
@@ -210,6 +213,33 @@ exports.findAllPostsByUserId = async (req, res, next) => {
       .sort([["createdAt", -1]]);
 
     return res.status(201).json({ data });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.getNotifications = async (req, res, next) => {
+  try {
+    const userId = await req.loggedInUser.id;
+    const todayDate = moment().format("LL");
+
+    const postData = await Post.find({
+      userId,
+      createdAt: { $lt: new Date(), $gt: new Date(todayDate) },
+    });
+    const commentData = await Comment.find({
+      userId,
+      createdAt: { $lt: new Date(), $gt: new Date(todayDate) },
+    })
+    .populate({
+      path: "postId"
+    })
+
+    if (postData || commentData) {
+      return res.status(200).json({ postData, commentData });
+    } else {
+      return res.status(404).send({ message: "No data found!" });
+    }
   } catch (error) {
     next(error);
   }

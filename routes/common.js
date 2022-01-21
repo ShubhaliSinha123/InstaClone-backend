@@ -11,7 +11,8 @@ const {
   deleteComment,
   findAllPostComments,
   findAllPostUser,
-  findAllPostsByUserId
+  findAllPostsByUserId,
+  getNotifications
 } = require("../controllers/common");
 
 const verified = require("../middleware/verify");
@@ -47,6 +48,7 @@ router
     canAccess("anyone"),
     deleteComment
   )
-  .get("/all-posts", verified, canAccess(["anyone"]), findAllPostUser);
+  .get("/all-posts", verified, canAccess(["anyone"]), findAllPostUser)
+  .get("/notifications", verified, canAccess("client"), getNotifications);
 
 module.exports = router;
