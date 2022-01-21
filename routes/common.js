@@ -18,7 +18,7 @@ const verified = require("../middleware/verify");
 const { canAccess } = require("../middleware/access");
 
 router
-  .post("/create-post", verified, canAccess("anyone"), createPost)
+  .post("/create-post", verified, canAccess("client"), createPost)
   .post("/create-comment/:postId", verified, canAccess("anyone"), createComment)
   .get(
     "/post-comments/:postId",

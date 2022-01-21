@@ -125,7 +125,7 @@ exports.findAllPostCommentById = async (req, res, next) => {
     const id = req.params.postId;
     const data = await Comment.find({ postId: id })
       .select("comments")
-      .populate({ path: "cUserId", select: ["name"] })
+      .populate({ path: "userId", select: ["name"] })
       .populate({ path: "postId", select: ["title", "createdAt"] });
 
     return res.status(200).json({ data });
@@ -208,8 +208,6 @@ exports.findAllPostsByUserId = async (req, res, next) => {
     const data = await Post.find({ userId })
       .select(["title", "images", "caption", "comments", "createdAt", "alt"])
       .sort([["createdAt", -1]]);
-
-    console.log(data);
 
     return res.status(201).json({ data });
   } catch (error) {
