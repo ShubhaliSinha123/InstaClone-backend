@@ -1,7 +1,7 @@
-const express = require("express");
-const dotenv = require('dotenv');
-const app = express();
-const bodyParser = require('body-parser');
+const express = require("express");   //framework, basically used to specify what fx.n is called for a particular http methods(GET, POST, PUT, DELETE)
+const dotenv = require('dotenv');   //automatically loads env variables
+const app = express();      
+const bodyParser = require('body-parser');    //send data through http requests
 
 dotenv.config({path: './config/config.env'});
 require('./db/conn'); 
