@@ -244,3 +244,22 @@ exports.getNotifications = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.onSearch = async (req, res, next) => {
+  try {
+    var result;
+    const searchKey = req.body.searchKey;
+
+    const searchedData = await User.find({name: { '$regex' : searchKey, '$options' : 'i' }});
+
+    if(searchedData.length) {
+     await searchedData.map((el) => {
+        result = Post.find({userId : el.id })
+      });
+    }
+
+    return res.status(200).json({ result });
+  } catch (error) {
+    next(error);
+  }
+}
